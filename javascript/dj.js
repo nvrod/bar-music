@@ -23,25 +23,23 @@ async function loadQueue() {
   return data || [];
 }
 
-// abrir según proveedor
 function playTrack(request) {
   let url = "";
 
   if (request.provider === "youtube" && request.track_id) {
-    url = `https://www.youtube.com/watch?v=${request.track_id}`;
+    url = `vnd.youtube:${request.track_id}`; // abre app de YouTube
   }
 
   if (request.provider === "ytmusic" && request.track_id) {
-    url = `https://music.youtube.com/watch?v=${request.track_id}`;
+    url = `https://music.youtube.com/watch?v=${request.track_id}`; // intenta abrir app YouTube Music
   }
 
   if (request.provider === "spotify" && request.track_id) {
-    // Deep link: abre Spotify app directamente
-    url = `spotify:track:${request.track_id}`;
+    url = `spotify:track:${request.track_id}`; // abre app de Spotify
   }
 
   if (url) {
-    window.open(url, "_blank");
+    window.location.href = url; // fuerza a abrir app
   }
 }
 
@@ -54,7 +52,6 @@ async function handleNewRequest(request) {
     .eq("id", request.id);
 }
 
-// ✅ realtime en supabase-js v2
 supabase
   .channel("requests-channel")
   .on(
